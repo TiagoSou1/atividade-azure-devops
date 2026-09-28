@@ -7,16 +7,14 @@ BEGIN
         Plataforma NVARCHAR(60) NOT NULL
     );
 END;
-MERGE dbo.Jogos AS destino
-USING (VALUES
-    (1, N'Hollow Knight', N'Metroidvania', N'PC'),
-    (2, N'Stardew Valley', N'Simulacao', N'PC'),
-    (3, N'Portal 2', N'Puzzle', N'PC'),
-    (4, N'Hades', N'Roguelike', N'PC'),
-    (5, N'Celeste', N'Plataforma', N'PC')
-) AS origem (ID, Nome, Genero, Plataforma)
-ON destino.ID = origem.ID
-WHEN MATCHED THEN UPDATE SET Nome=origem.Nome, Genero=origem.Genero, Plataforma=origem.Plataforma
-WHEN NOT MATCHED THEN INSERT (ID, Nome, Genero, Plataforma)
-VALUES (origem.ID, origem.Nome, origem.Genero, origem.Plataforma);
+IF NOT EXISTS (SELECT 1 FROM dbo.Jogos WHERE ID=1)
+    INSERT INTO dbo.Jogos VALUES (1, N'Hollow Knight', N'Metroidvania', N'PC');
+IF NOT EXISTS (SELECT 1 FROM dbo.Jogos WHERE ID=2)
+    INSERT INTO dbo.Jogos VALUES (2, N'Stardew Valley', N'Simulacao', N'PC');
+IF NOT EXISTS (SELECT 1 FROM dbo.Jogos WHERE ID=3)
+    INSERT INTO dbo.Jogos VALUES (3, N'Portal 2', N'Puzzle', N'PC');
+IF NOT EXISTS (SELECT 1 FROM dbo.Jogos WHERE ID=4)
+    INSERT INTO dbo.Jogos VALUES (4, N'Hades', N'Roguelike', N'PC');
+IF NOT EXISTS (SELECT 1 FROM dbo.Jogos WHERE ID=5)
+    INSERT INTO dbo.Jogos VALUES (5, N'Celeste', N'Plataforma', N'PC');
 SELECT ID, Nome, Genero, Plataforma FROM dbo.Jogos ORDER BY ID;

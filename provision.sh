@@ -6,7 +6,7 @@ export LOCATION=brazilsouth
 export SQL_SERVER=sql-jogos-563531-0928
 export DB_NAME=jogosdb
 export DB_USER=sqladmin
-export PLAN=plan-jogos-563531-0928
+export PLAN=plan-jogos-563531-0928-win
 export WEBAPP=web-jogos-563531-0928
 export AI=ai-jogos-563531-0928
 export LAW=law-jogos-563531-0928
@@ -22,7 +22,7 @@ az sql server create --name "$SQL_SERVER" --resource-group "$RG" --location "$LO
 az sql db create --resource-group "$RG" --server "$SQL_SERVER" --name "$DB_NAME" --service-objective Basic --backup-storage-redundancy Local --output none
 # 0.0.0.0 permite servicos Azure; evita liberar todos os enderecos da Internet.
 az sql server firewall-rule create --resource-group "$RG" --server "$SQL_SERVER" --name AllowAzureServices --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0 --output none
-az appservice plan create --name "$PLAN" --resource-group "$RG" --sku F1 --location "$LOCATION" --output none
+az appservice plan create --name "$PLAN" --resource-group "$RG" --sku F1 --is-linux false --location "$LOCATION" --output none
 az webapp create --name "$WEBAPP" --plan "$PLAN" --resource-group "$RG" --runtime 'NODE:22LTS' --output none
 az webapp update --name "$WEBAPP" --resource-group "$RG" --https-only true --output none
 az monitor log-analytics workspace create --resource-group "$RG" --workspace-name "$LAW" --location "$LOCATION" --retention-time 30 --output none
