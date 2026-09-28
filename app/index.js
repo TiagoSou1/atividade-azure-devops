@@ -1,4 +1,3 @@
-const express = require('express');
 const appInsights = require('applicationinsights');
 
 // Configuração do Application Insights
@@ -17,6 +16,7 @@ if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     console.log("App Insights connection string não encontrada.");
 }
 
+const express = require('express');
 const sql = require('mssql');
 const app = express();
 const port = process.env.PORT || 8080;
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>FIAP - Atividade DevOps</title>
+        <title>Catálogo de Jogos - FIAP</title>
         <style>
             body {
                 background-color: #1a1a1a;
@@ -99,9 +99,9 @@ app.get('/', (req, res) => {
     <body>
         <div class="container">
             <div class="badge">Deploy Status: Sucesso! ✅</div>
-            <h1>Atividade DevOps & Cloud</h1>
-            <p>Parabéns! Sua aplicação Node.js foi implementada com sucesso no Azure Web App através da sua esteira CI/CD.</p>
-            <p>O App Insights já está monitorando sua aplicação.</p>
+            <h1>Catálogo de Jogos · versão 1</h1>
+            <p>Cinco jogos, um catálogo e uma esteira de entrega contínua com GitHub Actions e Azure.</p>
+            <p>Projeto de Tiago Sousa Leite · 2TSCPW-2026</p>
             <a href="/tema" class="btn">🚀 Ver Dados do Banco</a>
         </div>
     </body>
@@ -111,14 +111,14 @@ app.get('/', (req, res) => {
 
 app.get('/tema', async (req, res) => {
     try {
-        // ALUNOS: Usem a configuração dbConfig para conectar no banco e fazer o SELECT na tabela do tema escolhido!
+        // Consulta ao catálogo persistido no Azure SQL.
         await sql.connect(dbConfig);
-        const result = await sql.query`SELECT * FROM NomeDaSuaTabela`; // ALTERAR AQUI!
+        const result = await sql.query`SELECT ID, Nome, Genero, Plataforma FROM dbo.Jogos ORDER BY ID`;
         
         res.json(result.recordset);
     } catch (err) {
         console.error("Erro ao conectar no banco:", err);
-        res.status(500).send("Erro ao buscar os dados: " + err.message);
+        res.status(500).send("Não foi possível consultar o catálogo no momento.");
     }
 });
 
